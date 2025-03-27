@@ -5,6 +5,10 @@ run câu lệnh sau:
 - npm run start
 
 chạy live server file index.html
-# code-example
 
-bài tập viết chức năng login, sau khi login thành công thì chuyển sang trang welcome và phải hiển thị "xin chào {username}", chức năng "Nhớ Tôi" phải hoạt động
+# -Dùng kiến thức cookie, session  viết chức năng login
+# -Sau khi login thành công thì chuyển sang trang welcome và phải hiển thị "xin chào {username}"
+# -Chức năng "Nhớ Tôi" phải hoạt động
+# -không dùng chatgpt, dùng google tìm code
+
+
