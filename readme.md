@@ -9,6 +9,7 @@ chạy live server file index.html
 # -Dùng kiến thức cookie, session  viết chức năng login
 # -Sau khi login thành công thì chuyển sang trang welcome và phải hiển thị "xin chào {username}"
 # -Chức năng "Nhớ Tôi" phải hoạt động
+# -không cần dùng DB
 # -không dùng chatgpt, dùng google tìm code
 # -gợi ý chỉ sửa file app.js và welcome.html
 
