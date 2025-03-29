@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -8,5 +8,82 @@
 </head>
 <body>
     <div>Xin chào username</div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+
+</head>
+<body>
+    <!-- Add an ID to easily target this element -->
+    <div id="welcome-message">Xin chào ...</div>
+
+    <!-- Add a simple logout button -->
+    <button id="logout-button" style="margin-top: 15px;">Đăng Xuất</button>
+
+    <script>
+        // Helper function to get a specific cookie by name
+        function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.startsWith(name + '=')) {
+                    // Decode the cookie value and return it
+                    return decodeURIComponent(cookie.substring(name.length + 1));
+                }
+            }
+            return null; // Return null if cookie not found
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const welcomeMessageDiv = document.getElementById('welcome-message');
+            const logoutButton = document.getElementById('logout-button');
+            const cookieName = 'loggedInUser'; // The name of the cookie we set in app.js
+
+            // Read the username directly from the cookie
+            const username = getCookie(cookieName);
+
+            if (username) {
+                // If the cookie exists and has a value, display the welcome message
+                welcomeMessageDiv.textContent = `Xin chào ${username}`;
+            } else {
+                // If the cookie doesn't exist, the user is not logged in. Redirect.
+                console.log('Not logged in (cookie missing), redirecting...');
+                // Adjust the path if your login page isn't at the root
+                window.location.href = '/index.html';
+            }
+
+            // Handle logout button click
+            logoutButton.addEventListener('click', () => {
+                // Client-side logout: simply delete the cookie by expiring it
+                console.log('Logging out...');
+                document.cookie = `${cookieName}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`; // Expire the cookie
+                // Redirect to login page
+                window.location.href = '/index.html';
+
+                /*
+                // Alternative using fetch to call a server-side /logout endpoint (if you added one)
+                fetch('/logout', { method: 'POST', credentials: 'omit' }) // credentials might not be needed if just expiring cookie server-side
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.message);
+                        window.location.href = '/index.html';
+                    })
+                    .catch(error => {
+                        console.error('Logout failed:', error);
+                        // Even if fetch fails, try client-side expiry and redirect
+                         document.cookie = `${cookieName}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+                         window.location.href = '/index.html';
+                    });
+                */
+            });
+        });
+    </script>
 </body>
 </html>
