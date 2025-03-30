@@ -4,9 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome</title>
- 
 </head>
 <body>
-    <div>Xin chào username</div>
+    <div id="welcome-message">Xin chào</div>
+    <script>
+        function getCookie(name) {
+            console.log('All cookies:', document.cookie);
+            const cookie = document.cookie.split(';');
+            for (let i = 0; i < cookie.length; i++) {
+                let cookiePair = cookie[i].trim();
+                if (cookiePair.indexOf(name + '=') === 0) {
+                    return decodeURIComponent(cookiePair.substring(name.length + 1, cookiePair.length));
+                }
+            }
+            return null;
+        }
+ 
+        document.addEventListener('DOMContentLoaded', function() {
+            const welcomeMessageDiv = document.getElementById('welcome-message');
+            const cookieName = 'loggedIn';
+
+            const username = getCookie(cookieName);
+            if (username) {
+                welcomeMessageDiv.textContent = `Xin chào ${username}`;
+            }
+        });
+    </script>
 </body>
 </html>

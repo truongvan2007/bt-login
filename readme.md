@@ -13,3 +13,5 @@ chạy live server file index.html
 # -không dùng chatgpt, dùng google tìm code
 # -gợi ý chỉ sửa file app.js và welcome.html
 
+# Giải pháp
+- Chạy run live server trên localhost
