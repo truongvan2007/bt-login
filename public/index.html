@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/public/js/api-service.js"></script>
     <title>Đăng Nhập</title>
     <style>
         body {
@@ -120,54 +121,26 @@
             const passwordInput = document.getElementById('password');
             const rememberCheckbox = document.getElementById('remember');
 
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent default form submission
-
-                const username = usernameInput.value.trim();
-                const password = passwordInput.value;
-                const remember = rememberCheckbox.checked;
-
-                // Hide any previous messages
-                errorMessage.style.display = 'none';
-                successMessage.style.display = 'none';
-
-                // Send login request
-                fetch('http://localhost:3000/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Login failed');
-                    }
-                    return response.json();
-                })
-                .then(data => {
+            document.getElementById('login-form').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                const remember = document.getElementById('remember').checked;
+                
+                try {
+                    await ApiService.login(username, password, remember);
                     // Show success message
-                    successMessage.style.display = 'block';
-                    
-                    // Store JWT token
-                    if (remember) {
-                        localStorage.setItem('token', data.token);
-                        localStorage.setItem('user', JSON.stringify(data.user));
-                    } else {
-                        sessionStorage.setItem('token', data.token);
-                        sessionStorage.setItem('user', JSON.stringify(data.user));
-                    }
-                    
-                    // Redirect to welcome page after a short delay
+                    document.getElementById('success-message').style.display = 'block';
+                    // Redirect
                     setTimeout(() => {
                         window.location.href = '/public/welcome.html';
                     }, 1500);
-                })
-                .catch(error => {
+                    
+                } catch (error) {
                     // Show error message
-                    errorMessage.style.display = 'block';
-                    console.error('Login error:', error);
-                });
+                    document.getElementById('error-message').style.display = 'block';
+                }
             });
         });
     </script>

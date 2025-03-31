@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/public/js/api-service.js"></script>
     <title>Welcome</title>
     <style>
         body {
@@ -71,66 +72,18 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const userInfoElement = document.getElementById('user-info');
-            const logoutBtn = document.getElementById('logout-btn');
-            
-            // Check for token in localStorage or sessionStorage
-            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-            const userStored = localStorage.getItem('user') || sessionStorage.getItem('user');
-            
-            if (!token) {
-                // Redirect to login page if not logged in
-                window.location.href = '/public/index.html';
-                return;
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const data = await ApiService.getCurrentUser();
+                document.getElementById('user-info').textContent = `Xin chào ${data.user.username}!`;
+            } catch (error) {
+                // Error handling - the service will automatically redirect to login if unauthorized
+                console.error('Error fetching user data');
             }
-            
-            // Display user info from storage first (faster UX)
-            if (userStored) {
-                try {
-                    const user = JSON.parse(userStored);
-                    userInfoElement.textContent = `Xin chào ${user.username}!`;
-                } catch (e) {
-                    console.error('Error parsing stored user data', e);
-                }
-            }
-            
-            // Verify token with server and get fresh user data
-            fetch('http://localhost:3000/user', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Token invalid or expired');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Update user info with data from server
-                userInfoElement.textContent = `Xin chào ${data.user.username}!`;
-            })
-            .catch(error => {
-                console.error('Authentication error:', error);
-                // Clear invalid token and redirect to login
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                sessionStorage.removeItem('token');
-                sessionStorage.removeItem('user');
-                window.location.href = '/public/index.html';
-            });
             
             // Handle logout
-            logoutBtn.addEventListener('click', function() {
-                // Clear token and user data
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                sessionStorage.removeItem('token');
-                sessionStorage.removeItem('user');
-                
-                // Redirect to login page
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                ApiService.logout();
                 window.location.href = '/public/index.html';
             });
         });
