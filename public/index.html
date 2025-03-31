@@ -105,17 +105,27 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in
+            const token = localStorage.getItem('token');
+            if (token) {
+                // Redirect to welcome page if already logged in
+                window.location.href = '/public/welcome.html';
+                return;
+            }
+
             const form = document.getElementById('login-form');
             const errorMessage = document.getElementById('error-message');
             const successMessage = document.getElementById('success-message');
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
+            const rememberCheckbox = document.getElementById('remember');
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault(); // Prevent default form submission
 
                 const username = usernameInput.value.trim();
                 const password = passwordInput.value;
+                const remember = rememberCheckbox.checked;
 
                 // Hide any previous messages
                 errorMessage.style.display = 'none';
@@ -138,6 +148,15 @@
                 .then(data => {
                     // Show success message
                     successMessage.style.display = 'block';
+                    
+                    // Store JWT token
+                    if (remember) {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                    } else {
+                        sessionStorage.setItem('token', data.token);
+                        sessionStorage.setItem('user', JSON.stringify(data.user));
+                    }
                     
                     // Redirect to welcome page after a short delay
                     setTimeout(() => {
