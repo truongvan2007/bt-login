@@ -27,17 +27,34 @@
             margin-bottom: 20px;
             font-size: 18px;
         }
-        .logout-btn {
+        .button-container {
+            margin-top: 20px;
+        }
+        .btn {
             padding: 10px 15px;
-            background-color: #f44336;
-            color: white;
+            margin-right: 10px;
+            margin-bottom: 10px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
+        }
+        .logout-btn {
+            background-color: #f44336;
+            color: white;
         }
         .logout-btn:hover {
             background-color: #d32f2f;
+        }
+        .demo-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+        .demo-btn:hover {
+            background-color: #0b7dda;
         }
     </style>
 </head>
@@ -47,7 +64,10 @@
         <div id="user-info" class="user-info">
             Đang tải thông tin người dùng...
         </div>
-        <button id="logout-btn" class="logout-btn">Đăng xuất</button>
+        <div class="button-container">
+            <a href="/public/grid-demo.html" class="btn demo-btn">Xem DevExtreme Grid Demo</a>
+            <button id="logout-btn" class="btn logout-btn">Đăng xuất</button>
+        </div>
     </div>
 
     <script>

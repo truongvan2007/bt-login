@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevExtreme Grid Demo</title>
+    
+    <!-- DevExtreme dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- DevExtreme theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.4/css/dx.light.css">
+    
+    <!-- DevExtreme library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.4/js/dx.all.js"></script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .nav-buttons {
+            margin-top: 20px;
+        }
+        .nav-btn {
+            padding: 10px 15px;
+            margin-right: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-btn:hover {
+            background-color: #45a049;
+        }
+        #gridContainer {
+            margin-top: 20px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DevExtreme Grid Demo</h1>
+        <div id="gridContainer"></div>
+        <div class="nav-buttons">
+            <a href="/public/welcome.html" class="nav-btn">Quay lại trang chính</a>
+            <button id="refresh-btn" class="nav-btn">Làm mới dữ liệu</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for token in localStorage or sessionStorage
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            
+            if (!token) {
+                // Redirect to login page if not logged in
+                window.location.href = '/public/index.html';
+                return;
+            }
+            
+            // Sample data for the grid
+            const employees = [
+                { ID: 1, Name: "Nguyễn Văn A", Position: "Giám đốc", Department: "Quản lý", BirthDate: "1985-03-15", HireDate: "2010-05-11", Salary: 50000000 },
+                { ID: 2, Name: "Trần Thị B", Position: "Trưởng phòng", Department: "Nhân sự", BirthDate: "1988-07-22", HireDate: "2012-10-05", Salary: 35000000 },
+                { ID: 3, Name: "Lê Văn C", Position: "Kế toán", Department: "Tài chính", BirthDate: "1990-11-30", HireDate: "2015-02-18", Salary: 28000000 },
+                { ID: 4, Name: "Phạm Thị D", Position: "Nhân viên", Department: "Kinh doanh", BirthDate: "1992-04-25", HireDate: "2016-08-03", Salary: 22000000 },
+                { ID: 5, Name: "Hoàng Văn E", Position: "Nhân viên", Department: "IT", BirthDate: "1993-12-10", HireDate: "2018-03-15", Salary: 25000000 },
+                { ID: 6, Name: "Đỗ Thị F", Position: "Nhân viên", Department: "Marketing", BirthDate: "1991-09-18", HireDate: "2017-11-20", Salary: 23000000 },
+                { ID: 7, Name: "Vũ Văn G", Position: "Trưởng phòng", Department: "IT", BirthDate: "1987-05-08", HireDate: "2011-07-14", Salary: 38000000 },
+                { ID: 8, Name: "Bùi Thị H", Position: "Nhân viên", Department: "Nhân sự", BirthDate: "1994-02-27", HireDate: "2019-01-05", Salary: 20000000 },
+                { ID: 9, Name: "Ngô Văn I", Position: "Nhân viên", Department: "Tài chính", BirthDate: "1992-08-15", HireDate: "2017-04-22", Salary: 24000000 },
+                { ID: 10, Name: "Dương Thị K", Position: "Trưởng phòng", Department: "Kinh doanh", BirthDate: "1989-06-14", HireDate: "2013-09-08", Salary: 36000000 }
+            ];
+            
+            // Initialize DevExtreme DataGrid
+            $("#gridContainer").dxDataGrid({
+                dataSource: employees,
+                keyExpr: "ID",
+                showBorders: true,
+                paging: {
+                    pageSize: 5
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [5, 10, 20],
+                    showInfo: true
+                },
+                headerFilter: {
+                    visible: true
+                },
+                filterRow: {
+                    visible: true
+                },
+                searchPanel: {
+                    visible: true,
+                    width: 240,
+                    placeholder: "Tìm kiếm..."
+                },
+                export: {
+                    enabled: true,
+                    allowExportSelectedData: true
+                },
+                selection: {
+                    mode: "multiple"
+                },
+                grouping: {
+                    autoExpandAll: false
+                },
+                groupPanel: {
+                    visible: true
+                },
+                sortable: true,
+                columns: [
+                    { dataField: "ID", width: 50 },
+                    { dataField: "Name", caption: "Tên nhân viên" },
+                    { dataField: "Position", caption: "Chức vụ", groupIndex: 0 },
+                    { dataField: "Department", caption: "Phòng ban" },
+                    { 
+                        dataField: "BirthDate", 
+                        caption: "Ngày sinh", 
+                        dataType: "date",
+                        format: "dd/MM/yyyy" 
+                    },
+                    { 
+                        dataField: "HireDate", 
+                        caption: "Ngày vào làm", 
+                        dataType: "date",
+                        format: "dd/MM/yyyy" 
+                    },
+                    { 
+                        dataField: "Salary", 
+                        caption: "Lương (VNĐ)",
+                        dataType: "number",
+                        format: "#,##0",
+                        alignment: "right" 
+                    }
+                ],
+                summary: {
+                    totalItems: [
+                        {
+                            column: "Salary",
+                            summaryType: "sum",
+                            valueFormat: "#,##0",
+                            displayFormat: "Tổng: {0} VNĐ",
+                        },
+                        {
+                            column: "Name",
+                            summaryType: "count",
+                            displayFormat: "Tổng số: {0} nhân viên"
+                        }
+                    ],
+                    groupItems: [
+                        {
+                            column: "Salary",
+                            summaryType: "sum",
+                            valueFormat: "#,##0",
+                            displayFormat: "Tổng: {0} VNĐ",
+                            alignByColumn: true
+                        },
+                        {
+                            column: "Name",
+                            summaryType: "count",
+                            displayFormat: "Số lượng: {0}",
+                            alignByColumn: true
+                        }
+                    ]
+                }
+            });
+            
+            // Handle refresh button
+            document.getElementById('refresh-btn').addEventListener('click', function() {
+                $("#gridContainer").dxDataGrid("instance").refresh();
+            });
+        });
+    </script>
+</body>
+</html>
