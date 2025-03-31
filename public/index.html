@@ -110,12 +110,14 @@
             const successMessage = document.getElementById('success-message');
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
+            const rememberCheckbox = document.getElementById('remember');
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault(); // Prevent default form submission
 
                 const username = usernameInput.value.trim();
                 const password = passwordInput.value;
+                const remember = rememberCheckbox.checked;
 
                 // Hide any previous messages
                 errorMessage.style.display = 'none';
@@ -127,7 +129,8 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ username, password, remember }),
+                    credentials: 'include' // Include cookies in the request
                 })
                 .then(response => {
                     if (!response.ok) {
