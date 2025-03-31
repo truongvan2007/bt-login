@@ -4,9 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome</title>
- 
 </head>
 <body>
-    <div>Xin chào username</div>
+    <h2 id="welcome-message"></h2>
 </body>
+<script>
+    function showWelcome() {
+        const welcomeMessage = document.getElementById("welcome-message");
+        let loggedInUser = getCookie("remembered_user");
+        if (loggedInUser){
+            welcomeMessage.innerText = "Xin chào, " + loggedInUser + "!";
+        } else {
+            welcomeMessage.innerText = "Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.";
+            setTimeout(() => {window.location.href = '/public/index.html'}, 2000);
+        }
+    }
+
+    function getCookie(name) {
+        const cookies = document.cookie.split("; ");
+        for (let cookie of cookies) {
+            let [key, value] = cookie.split("=");
+            if (key === name) return value;
+        }
+        return "";
+    }
+
+    document.addEventListener("DOMContentLoaded", showWelcome);
+</script>
 </html>

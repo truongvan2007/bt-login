@@ -102,7 +102,6 @@
             <input type="submit" value="Đăng Nhập">
         </form>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('login-form');
@@ -110,12 +109,14 @@
             const successMessage = document.getElementById('success-message');
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
+            const rememberCheckbox = document.getElementById('remember');
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault(); // Prevent default form submission
-
+                
                 const username = usernameInput.value.trim();
                 const password = passwordInput.value;
+                const rememberMe = rememberCheckbox.checked;
 
                 // Hide any previous messages
                 errorMessage.style.display = 'none';
@@ -127,7 +128,8 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ username, password, rememberMe }),
+                    credentials: 'include'
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -138,7 +140,7 @@
                 .then(data => {
                     // Show success message
                     successMessage.style.display = 'block';
-                    
+
                     // Redirect to welcome page after a short delay
                     setTimeout(() => {
                         window.location.href = '/public/welcome.html';
